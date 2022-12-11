@@ -7,22 +7,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type DAnswer struct {
+type DExam struct {
 	Id int `json:"id"`
 }
 
-type Answer struct {
-	IdAnswer int    `json:"idAnswer"`
-	Variant  string `json:"variant"`
-	IsTrue   bool   `json:"isTrue"`
+type Exam struct {
+	IdExam  int    `json:"IdExam"`
+	Title   string `json:"Title"`
+	Timemin int    `json:"Timemin"`
 }
 
-func GetAnswer(c *gin.Context) {
-	var response Answer
+func GetExam(c *gin.Context) {
+	var response Exam
 	var err_r error_res
 	requestBody := c.Param("id")
 	log.Print(requestBody)
-	err := db.QueryRow(context.Background(), `select idAnswer, variants, isTrue from Answers where idAnswer=$1`, requestBody).Scan(&response.IdAnswer, &response.Variant, &response.IsTrue)
+	err := db.QueryRow(context.Background(), `select idExam, title, timemin from Exams where idExam=$1`, requestBody).Scan(&response.IdExam, &response.Title, &response.Timemin)
 	if err != nil {
 		log.Print("db error")
 		err_r.Err_s = "failed data from db"
@@ -32,15 +32,15 @@ func GetAnswer(c *gin.Context) {
 	c.JSON(200, response)
 }
 
-func AddAnswer(c *gin.Context) {
-	var response Answer
+func AddExam(c *gin.Context) {
+	var response Exam
 	var err_r error_res
 	if err := c.BindJSON(&response); err != nil {
 		err_r.Err_s = "failed request"
 		c.JSON(400, err_r)
 		return
 	}
-	_, err := db.Exec(context.Background(), "INSERT INTO Answers (variants, isTrue) values ($1, $2)", response.Variant, response.IsTrue)
+	_, err := db.Exec(context.Background(), "INSERT INTO Exams (title, timemin) values ($1, $2)", response.Title, response.Timemin)
 	if err != nil {
 		log.Print("db error")
 		err_r.Err_s = "failed data from db"
@@ -52,15 +52,15 @@ func AddAnswer(c *gin.Context) {
 	c.JSON(200, res)
 }
 
-func DelAnswer(c *gin.Context) {
-	var response DAnswer
+func DelExam(c *gin.Context) {
+	var response DExam
 	var err_r error_res
 	if err := c.BindJSON(&response); err != nil {
 		err_r.Err_s = "failed request"
 		c.JSON(400, err_r)
 		return
 	}
-	_, err := db.Exec(context.Background(), "delete from Answers where idanswer=$1", response.Id)
+	_, err := db.Exec(context.Background(), "delete from Exams where idExam=$1", response.Id)
 	if err != nil {
 		log.Print("db error")
 		err_r.Err_s = "failed data from db"

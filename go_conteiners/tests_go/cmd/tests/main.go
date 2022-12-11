@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"log"
-	"tests/internal/core"
 	"tests/internal/entity"
 	"tests/internal/routers"
 
@@ -22,7 +21,6 @@ func main() {
 		//os.Exit(1)
 	}
 	entity.SetDb(conn)
-	core.SetDb(conn)
 	config := cors.DefaultConfig()
 	config.AllowAllOrigins = true
 

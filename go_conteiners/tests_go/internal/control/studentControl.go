@@ -7,22 +7,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type DAnswer struct {
+type DStudent struct {
 	Id int `json:"id"`
 }
 
-type Answer struct {
-	IdAnswer int    `json:"idAnswer"`
-	Variant  string `json:"variant"`
-	IsTrue   bool   `json:"isTrue"`
+type GetStudentStruct struct {
+	Name       string `json:"name"`
+	SecondName string `json:"secondname"`
+}
+type Student struct {
+	Name       string `json:"name"`
+	SecondName string `json:"secondname"`
 }
 
-func GetAnswer(c *gin.Context) {
-	var response Answer
+func GetStudent(c *gin.Context) {
+	var response GetStudentStruct
 	var err_r error_res
 	requestBody := c.Param("id")
 	log.Print(requestBody)
-	err := db.QueryRow(context.Background(), `select idAnswer, variants, isTrue from Answers where idAnswer=$1`, requestBody).Scan(&response.IdAnswer, &response.Variant, &response.IsTrue)
+	err := db.QueryRow(context.Background(), `select name, secondName from Students where idStudent=$1`, requestBody).Scan(&response.Name, &response.SecondName)
 	if err != nil {
 		log.Print("db error")
 		err_r.Err_s = "failed data from db"
@@ -32,15 +35,15 @@ func GetAnswer(c *gin.Context) {
 	c.JSON(200, response)
 }
 
-func AddAnswer(c *gin.Context) {
-	var response Answer
+func AddStudent(c *gin.Context) {
+	var response Student
 	var err_r error_res
 	if err := c.BindJSON(&response); err != nil {
 		err_r.Err_s = "failed request"
 		c.JSON(400, err_r)
 		return
 	}
-	_, err := db.Exec(context.Background(), "INSERT INTO Answers (variants, isTrue) values ($1, $2)", response.Variant, response.IsTrue)
+	_, err := db.Exec(context.Background(), "INSERT INTO Students (name, secondName) values ($1, $2)", response.Name, response.SecondName)
 	if err != nil {
 		log.Print("db error")
 		err_r.Err_s = "failed data from db"
@@ -52,15 +55,15 @@ func AddAnswer(c *gin.Context) {
 	c.JSON(200, res)
 }
 
-func DelAnswer(c *gin.Context) {
-	var response DAnswer
+func DelStudent(c *gin.Context) {
+	var response DStudent
 	var err_r error_res
 	if err := c.BindJSON(&response); err != nil {
 		err_r.Err_s = "failed request"
 		c.JSON(400, err_r)
 		return
 	}
-	_, err := db.Exec(context.Background(), "delete from Answers where idanswer=$1", response.Id)
+	_, err := db.Exec(context.Background(), "delete from Students where idStudent=$1", response.Id)
 	if err != nil {
 		log.Print("db error")
 		err_r.Err_s = "failed data from db"

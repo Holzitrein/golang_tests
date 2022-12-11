@@ -1,7 +1,6 @@
 package routers
 
 import (
-	"tests/internal/core"
 	"tests/internal/entity"
 
 	"github.com/gin-gonic/gin"
@@ -36,9 +35,9 @@ func Routes(route *gin.Engine) {
 	route.POST("/api/result", entity.AddResult)
 	route.DELETE("/api/result", entity.DelResult)
 
-	route.GET("/api/result/student/:id", core.GetResultsByStudent)
-	route.POST("/api/result/start", core.PostStartTest)
-	route.GET("/api/result/exam/:id", core.GetResultsBySubject)
-	route.GET("/api/result/status/:idStudent/:idSubject", core.GetStatusTest)
-	route.POST("/api/result/finish", core.PostAnswerTest)
+	route.GET("/api/result/student/:id", entity.GetResultsByStudent)
+	route.POST("/api/result/start", entity.PostStartTest)
+	route.GET("/api/result/exam/:id", entity.GetResultsBySubject)
+	route.GET("/api/result/status/:idStudent/:idSubject", entity.GetStatusTest)
+	route.POST("/api/result/finish", entity.PostAnswerTest)
 }

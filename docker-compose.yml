@@ -15,8 +15,8 @@ services:
     build:
       context: ./go_conteiners/tests_go
       dockerfile: Dockerfile
-  restart: always
-  ports:
-    - "8080:8080"
-  links:
-    - database
+    restart: always
+    ports:
+      - "8080:8080"
+    links:
+      - database
